@@ -76,23 +76,23 @@
       },
 
       onApprove: (data) => {
-        return fetch("https://staygo-backend-render.onrender.com/api/pagos/paypal/capturar-orden", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            orderID: data.orderID,
-            IdUsuario: usuario,
-            IdReserva: reserva
-          })
-        })
-        .then(r => r.json())
-        .then(() => {
-          window.location.href = "/paypal_success.html";
-        });
-      }
+                    // ... (Captura la orden en el backend) ...
+                    .then(r => r.json())
+                    .then(() => {
+                      if (window.opener) {
+                        window.opener.postMessage("pago_cerrado", "*"); // Notifica a Flutter
+                      }
+                      window.close(); // Fuerza el cierre, ignorando la URL incorrecta del backend
+                    });
+                  },
+      
+                  onCancel: (data) => {
+                    window.close(); // Cierra si se cancela
+                  }
 
     }).render("#paypal-button-container");
   </script>
 
 </body>
 </html>
+
