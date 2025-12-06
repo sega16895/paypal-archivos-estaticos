@@ -1,49 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Pago Exitoso - StayGo</title>
+    <meta charset="UTF-8" />
+    <title>Pago Exitoso - StayGo</title>
 
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: 'Segoe UI', sans-serif;
-      background: #ffffff;
-      margin: 0;
-      text-align: center;
-    }
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background: #ffffff;
+            margin: 0;
+            text-align: center;
+        }
 
-    h1 { 
-      color: #2e7d32; 
-      font-size: 28px; 
-      margin-bottom: 6px;
-    }
+        h1 {
+            color: #2e7d32;
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
 
-    p { 
-      font-size: 18px; 
-      color: #333;
-    }
-  </style>
+        p {
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
 </head>
 
 <body>
 
-  <h1>✔ Pago realizado con éxito</h1>
-  <p>Tu reserva ha sido confirmada.</p>
+    <h1>✔ Pago realizado con éxito</h1>
+    <p>Tu reserva ha sido confirmada.</p>
 
-  <script>
-    if (window.opener) {
-      window.opener.postMessage("pago_exitoso", "*");
-    }
-
-    setTimeout(() => {
-      window.close();
-    }, 800);
-  </script>
+    <script>
+        // ⚠️ CORRECCIÓN: Eliminamos window.opener.postMessage y window.close().
+        // En su lugar, forzamos una redirección que Flutter pueda interceptar
+        // con mayor fiabilidad que window.close().
+        
+        // Retrasamos la redirección para que el usuario vea el mensaje de éxito
+        setTimeout(() => {
+            // FORZAMOS LA REDIRECCIÓN a una URL que Flutter detectará en onNavigationRequest.
+            // Esto le dice a Flutter que es hora de cerrar el WebView.
+            window.location.href = "https://flutter.close.success/paypal-done"; 
+        }, 800);
+    </script>
 
 </body>
 </html>
