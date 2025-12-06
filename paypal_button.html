@@ -1,195 +1,103 @@
- <!DOCTYPE html>
-
+<!DOCTYPE html>
 <html lang="es">
-
 <head>
-
   <meta charset="UTF-8" />
-
   <title>Pago con PayPal - StayGo</title>
-
-
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
+  <!-- 🔥 NECESARIO PARA QUE ANDROID WEBVIEW NO BLOQUEE PAYPAL -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
 
   <script src="https://www.paypal.com/sdk/js?client-id=ARCyNabdMZ14Vb3fAMDEW3I7tVghlPzjmzoV_3CLISPFHD-LmGO_GBNF0JPC_dL4h6wphUSHRD_HaDY6&currency=USD"></script>
 
-
-
   <style>
-
     body {
-
       margin: 0;
-
       padding: 0;
-
       background: #6ebf77;
-
       font-family: 'Segoe UI', sans-serif;
-
       display: flex;
-
       justify-content: center;
-
       align-items: center;
-
       min-height: 100vh;
-
     }
-
-
 
     .contenedor {
-
       width: 95%;
-
       max-width: 420px;
-
       background: white;
-
       padding: 30px;
-
       border-radius: 20px;
-
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-
       text-align: center;
-
     }
-
-
 
     .titulo {
-
       font-size: 22px;
-
       font-weight: bold;
-
       margin-bottom: 5px;
-
       color: #003e2f;
-
     }
-
-
 
     .monto {
-
       font-size: 20px;
-
       font-weight: bold;
-
       color: #a8e10c;
-
       margin-bottom: 20px;
-
     }
-
   </style>
-
 </head>
-
-
 
 <body>
 
-
-
   <div class="contenedor">
-
     <div class="titulo">Procesar pago con PayPal</div>
-
     <div id="infoMonto" class="monto"></div>
-
     <div id="paypal-button-container"></div>
-
   </div>
 
-
-
   <script>
-
     const params = new URLSearchParams(window.location.search);
-
     const total = params.get("total");
-
     const reserva = params.get("reserva");
-
     const usuario = params.get("usuario");
 
-
-
     document.getElementById("infoMonto").innerText =
-
       `$${Number(total).toFixed(2)} USD`;
-
-
 
     paypal.Buttons({
 
-
-
       createOrder: () => {
-
         return fetch("https://staygo-backend-render.onrender.com/api/pagos/paypal/crear-orden", {
-
           method: "POST",
-
           headers: { "Content-Type": "application/json" },
-
           body: JSON.stringify({ total, IdReserva: reserva, IdUsuario: usuario })
-
         })
-
         .then(r => r.json())
-
         .then(data => data.id);
-
       },
 
-
-
       onApprove: (data) => {
-
         return fetch("https://staygo-backend-render.onrender.com/api/pagos/paypal/capturar-orden", {
-
           method: "POST",
-
           headers: { "Content-Type": "application/json" },
-
           body: JSON.stringify({
-
             orderID: data.orderID,
-
             IdUsuario: usuario,
-
             IdReserva: reserva
-
           })
-
         })
-
         .then(r => r.json())
-
         .then(() => {
-
-          window.location.href = "https://sega16895.github.io/paypal-archivos-estaticos/paypal_success.html";
-
+          window.location.href =
+            "https://sega16895.github.io/paypal-archivos-estaticos/paypal_success.html";
         });
-
       }
 
-
-
     }).render("#paypal-button-container");
-
   </script>
 
-
-
 </body>
-
 </html>
