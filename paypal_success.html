@@ -36,13 +36,10 @@
   <p>Tu reserva ha sido confirmada.</p>
 
   <script>
-    if (window.opener) {
-      window.opener.postMessage("pago_exitoso", "*");
-    }
-
+    // Esto es para móviles (APK) usando WebView
     setTimeout(() => {
-      window.close();
-    }, 800);
+      window.location.href = "close_paypal";
+    }, 1500);
   </script>
 
 </body>
